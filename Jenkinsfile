@@ -16,7 +16,18 @@ podTemplate(label: 'pod-hugo-app', containers: [
         def DOCKER_IMAGE_NAME = 'hugo-app-jenkins'
         def K8S_DEPLOYMENT_NAME = 'hugo-app'
 
+        withEnv([
+            'http_proxy=http://proxy1.si.c-s.fr:3128',
+            'https_proxy=http://proxy1.si.c-s.fr:3128'
+        ]) {
+
         stage('Clone Hugo App Repository') {
+            container('hugo') {
+                stage('Env') {
+                    sh ("env | sort")
+                }
+            }
+
             checkout scm
 
             container('hugo') {
@@ -46,7 +57,7 @@ podTemplate(label: 'pod-hugo-app', containers: [
                 }
             }
 
-        }
+        }}
     }
 }
 
